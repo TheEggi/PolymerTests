@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Test</title>
+    <script src="bower_components/platform/platform.js"></script>
+    <link rel="import" href="bower_components/polymer/polymer.html"/>
+    <script src="bower_components/elements/Chart.js"></script>
+    <link rel="import" href="bower_components/elements/charts.html"/>
+    <link rel="import"
+          href="bower_components/polymer-grid-layout/polymer-grid-layout.html"/>
+    <link rel="import"
+          href="bower_components/polymer-ui-icon-button/polymer-ui-icon-button.html">
+    <link rel="import"
+          href="bower_components/polymer-flex-layout/polymer-flex-layout.html">
+    <!--<script src="bower_components/chart-js-polymer-master/lib/polymer.min.js"></script>
+    <link rel="import"
+          href="bower_components/polymer-flex-layout/polymer-flex-layout.html"/>
+    <link rel="import"
+          href="bower_components/polymer-grid-layout/polymer-grid-layout.html"/>
+    <link rel="import"
+          href="bower_components/polymer-ui-icon-button/polymer-ui-icon-button.html">
+    <script src="bower_components/chart-js-polymer-master/lib/chart.min.js"></script>-->
+</head>
+<body>
+<div>
+    <grid-test></grid-test>
+
+    <polymer-element name="grid-test">
+        <template>
+            <polymer-grid-layout nodes="{{nodes}}" layout="{{layout}}"></polymer-grid-layout>
+
+            <panel id="toolbar">toolbar</panel>
+            <panel id="sidebar" v-flex>sidebar</panel>
+            <panel id="workspace" flex>
+                <polymer-flex-layout horizontal></polymer-flex-layout>
+                <chart-doughnut values="[30, 50, 100, 40, 120]"></chart-doughnut>
+                <chart-line></chart-line>
+                <chart-polar-area></chart-polar-area>
+            </panel>
+            <panel id="outputToolbar">otherbar</panel>
+            <panel id="output">
+                output
+            </panel>
+            <panel id="anus">
+                test
+                <polymer-ui-icon-button active="true" src="https://mentalpoo.files.wordpress.com/2009/11/fat_ass.jpg" on-click="{{buttonClick}}"></polymer-ui-icon-button>
+            </panel>
+
+            <style>
+                panel {
+                    display: inline-block;
+                    border: 1px solid black;
+                    padding: 16px;
+                }
+                #outputToolbar {
+                    width: 400px;
+                }
+                #output {
+                    width: 300px;
+                }
+                #workspace {
+                    border-color: orange;
+                }
+                #anus{
+                    border-color: orchid;
+                }
+                #spacer{
+                    padding: 32px;
+                }
+
+            </style>
+        </template>
+        <script>
+            Polymer('grid-test', {
+                // 1 = toolbar, 2 = sidebar, 3 = workspace, 4 = otherbar, 5 = output, 6 = anus
+                arrangements: [[
+                    [1, 1, 1],
+                    [2, 3, 4],
+                    [2, 3, 5],
+                    [2, 6, 5]
+
+                ],
+                    [
+                        [4, 3, 2],
+                        [5, 3, 2],
+                        [5, 1, 1]
+                    ], [
+                        [1, 1],
+                        [2, 3],
+                        [4, 3]
+                    ]
+                ],
+                outputLayout: 0,
+                ready: function() {
+                    //this.nodes = [
+                    //  this.$.toolbar, this.$.sidebar, this.$.workspace,
+                    //  this.$.outputToolbar, this.$.output
+                    //];
+                    this.outputLayoutChanged();
+                    //setInterval(this.toggleLayout.bind(this), 2500);
+                },
+                outputLayoutChanged: function() {
+                    this.layout = this.arrangements[this.outputLayout];
+                },
+                toggleLayout: function() {
+                    this.outputLayout = (this.outputLayout + 1) % this.arrangements.length;
+                }
+            });
+        </script>
+    </polymer-element>
+</div>
+</body>
+</html>

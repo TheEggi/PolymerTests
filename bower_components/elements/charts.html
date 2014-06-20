@@ -1,0 +1,367 @@
+<link rel="import" href="../polymer/polymer.html"/>
+
+<polymer-element name="chart-doughnut" attributes="values colors">
+    <template>
+        <canvas id="canvas" width="200" height="200"></canvas>
+    </template>
+    <script>
+        Polymer("chart-doughnut", {
+            ready: function () {
+                this.data = [];
+                this.values.forEach(function (val, i) {
+                    this.data.push({ color: this.colors[i], value: val });
+                }, this);
+                this.options = {
+                    //Boolean - Whether we should show a stroke on each segment
+                    segmentShowStroke: true,
+
+                    //String - The colour of each segment stroke
+                    segmentStrokeColor: "#fff",
+
+                    //Number - The width of each segment stroke
+                    segmentStrokeWidth: 2,
+
+                    //The percentage of the chart that we cut out of the middle.
+                    percentageInnerCutout: 50,
+
+                    //Boolean - Whether we should animate the chart
+                    animation: true,
+
+                    //Number - Amount of animation steps
+                    animationSteps: 100,
+
+                    //String - Animation easing effect
+                    animationEasing: "easeOutBounce",
+
+                    //Boolean - Whether we animate the rotation of the Doughnut
+                    animateRotate: true,
+
+                    //Boolean - Whether we animate scaling the Doughnut from the centre
+                    animateScale: false,
+
+                    //Function - Will fire on animation completion.
+                    onAnimationComplete: null
+                }
+                this.ctx = this.$.canvas.getContext('2d');
+                this.chart = new Chart(this.ctx).Doughnut(this.data, this.options);
+            },
+            values: [30, 50, 100, 40, 120],
+            colors: ["#EF9283", "#FCDFA5", "#B8E2BA", "#C2B6A0", "#FECD81"]
+        });
+    </script>
+</polymer-element>
+
+<!-- Polar Area -->
+
+<polymer-element name="chart-polar-area" attributes="values colors">
+    <template>
+        <canvas id="canvas" width="200" height="200"></canvas>
+    </template>
+    <script>
+        Polymer("chart-polar-area", {
+            ready: function () {
+                this.data = [];
+                this.values.forEach(function (val, i) {
+                    this.data.push({ color: this.colors[i], value: val });
+                }, this);
+                this.options = {
+
+                    //Boolean - Whether we show the scale above or below the chart segments
+                    scaleOverlay: true,
+
+                    //Boolean - If we want to override with a hard coded scale
+                    scaleOverride: false,
+
+                    //** Required if scaleOverride is true **
+                    //Number - The number of steps in a hard coded scale
+                    scaleSteps: null,
+                    //Number - The value jump in the hard coded scale
+                    scaleStepWidth: null,
+                    //Number - The centre starting value
+                    scaleStartValue: null,
+
+                    //Boolean - Show line for each value in the scale
+                    scaleShowLine: true,
+
+                    //String - The colour of the scale line
+                    scaleLineColor: "rgba(0,0,0,.1)",
+
+                    //Number - The width of the line - in pixels
+                    scaleLineWidth: 1,
+
+                    //Boolean - whether we should show text labels
+                    scaleShowLabels: true,
+
+                    //Interpolated JS string - can access value
+                    scaleLabel: "<%=value%>",
+
+                    //String - Scale label font declaration for the scale label
+                    scaleFontFamily: "'Arial'",
+
+                    //Number - Scale label font size in pixels
+                    scaleFontSize: 12,
+
+                    //String - Scale label font weight style
+                    scaleFontStyle: "normal",
+
+                    //String - Scale label font colour
+                    scaleFontColor: "#666",
+
+                    //Boolean - Show a backdrop to the scale label
+                    scaleShowLabelBackdrop: true,
+
+                    //String - The colour of the label backdrop
+                    scaleBackdropColor: "rgba(255,255,255,0.75)",
+
+                    //Number - The backdrop padding above & below the label in pixels
+                    scaleBackdropPaddingY: 2,
+
+                    //Number - The backdrop padding to the side of the label in pixels
+                    scaleBackdropPaddingX: 2,
+
+                    //Boolean - Stroke a line around each segment in the chart
+                    segmentShowStroke: true,
+
+                    //String - The colour of the stroke on each segement.
+                    segmentStrokeColor: "#fff",
+
+                    //Number - The width of the stroke value in pixels
+                    segmentStrokeWidth: 2,
+
+                    //Boolean - Whether to animate the chart or not
+                    animation: true,
+
+                    //Number - Amount of animation steps
+                    animationSteps: 100,
+
+                    //String - Animation easing effect.
+                    animationEasing: "easeOutBounce",
+
+                    //Boolean - Whether to animate the rotation of the chart
+                    animateRotate: true,
+
+                    //Boolean - Whether to animate scaling the chart from the centre
+                    animateScale: false,
+
+                    //Function - This will fire when the animation of the chart is complete.
+                    onAnimationComplete: null
+                };
+                this.ctx = this.$.canvas.getContext('2d');
+                this.chart = new Chart(this.ctx).PolarArea(this.data, this.options);
+            },
+            values: [30, 90, 18, 58, 82],
+            colors: ["#FCDFA5", "#B8E2BA", "#C2B6A0", "#FECD81", "#EF9283"]
+        });
+    </script>
+</polymer-element>
+
+<!-- Line -->
+
+<polymer-element name="chart-line" attributes="labels values colors">
+    <template>
+        <canvas id="canvas" width="500" height="200"></canvas>
+    </template>
+    <script>
+        Polymer("chart-line", {
+            ready: function () {
+                this.datasets = [];
+                this.values.forEach(function (val, i) {
+                    this.datasets.push({
+                        fillColor: "rgba(" + this.colors[i] + ",0.5)",
+                        strokeColor: "rgba(" + this.colors[i] + ",1)",
+                        pointColor: "rgba(" + this.colors[i] + ",1)",
+                        pointStrokeColor: "#fff",
+                        data: this.values[i]
+                    });
+                }, this);
+
+                this.options = {
+
+                    //Boolean - If we show the scale above the chart data
+                    scaleOverlay: true,
+
+                    //Boolean - If we want to override with a hard coded scale
+                    scaleOverride: false,
+
+                    //** Required if scaleOverride is true **
+                    //Number - The number of steps in a hard coded scale
+                    scaleSteps: null,
+                    //Number - The value jump in the hard coded scale
+                    scaleStepWidth: null,
+                    //Number - The scale starting value
+                    scaleStartValue: null,
+
+                    //String - Colour of the scale line
+                    scaleLineColor: "rgba(0,0,0,.1)",
+
+                    //Number - Pixel width of the scale line
+                    scaleLineWidth: 1,
+
+                    //Boolean - Whether to show labels on the scale
+                    scaleShowLabels: true,
+
+                    //Interpolated JS string - can access value
+                    scaleLabel: "<%=value%>",
+
+                    //String - Scale label font declaration for the scale label
+                    scaleFontFamily: "'Arial'",
+
+                    //Number - Scale label font size in pixels
+                    scaleFontSize: 20,
+
+                    //String - Scale label font weight style
+                    scaleFontStyle: "normal",
+
+                    //String - Scale label font colour
+                    scaleFontColor: "#666",
+
+                    ///Boolean - Whether grid lines are shown across the chart
+                    scaleShowGridLines: true,
+
+                    //String - Colour of the grid lines
+                    scaleGridLineColor: "rgba(0,0,0,.05)",
+
+                    //Number - Width of the grid lines
+                    scaleGridLineWidth: 2,
+
+                    //Boolean - Whether the line is curved between points
+                    bezierCurve: true,
+
+                    //Boolean - Whether to show a dot for each point
+                    pointDot: true,
+
+                    //Number - Radius of each point dot in pixels
+                    pointDotRadius: 3,
+
+                    //Number - Pixel width of point dot stroke
+                    pointDotStrokeWidth: 1,
+
+                    //Boolean - Whether to show a stroke for datasets
+                    datasetStroke: true,
+
+                    //Number - Pixel width of dataset stroke
+                    datasetStrokeWidth: 2,
+
+                    //Boolean - Whether to fill the dataset with a colour
+                    datasetFill: true,
+
+                    //Boolean - Whether to animate the chart
+                    animation: true,
+
+                    //Number - Number of animation steps
+                    animationSteps: 200,
+
+                    //String - Animation easing effect
+                    animationEasing: "easeOutQuart",
+
+                    //Function - Fires when the animation is complete
+                    onAnimationComplete: null
+
+                }
+                this.data = { labels: this.labels, datasets: this.datasets };
+
+                console.log(this.data);
+
+                this.ctx = this.$.canvas.getContext('2d');
+                this.chart = new Chart(this.ctx).Line(this.data, this.options);
+            },
+            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+            scaleLineWidth: 10,
+            values: [
+                [65, 59, 90, 81, 56, 55, 40],
+                [28, 48, 40, 19, 96, 27, 100]
+            ],
+            colors: [
+                "239,146,131",
+                "252,223,165",
+                "184,226,186",
+                "194,182,160",
+                "254,205,129"
+            ]
+        });
+    </script>
+</polymer-element>
+
+<!-- Bar -->
+
+<polymer-element name="chart-bar" attributes="labels values colors">
+    <template>
+        <canvas id="canvas" width="450" height="200"></canvas>
+    </template>
+    <script>
+        Polymer("chart-bar", {
+            ready: function () {
+                this.datasets = [];
+                this.values.forEach(function (val, i) {
+                    this.datasets.push({
+                        fillColor: "rgba(" + this.colors[i] + ",0.5)",
+                        strokeColor: "rgba(" + this.colors[i] + ",1)",
+                        data: this.values[i]
+                    });
+                }, this);
+
+                this.data = { labels: this.labels, datasets: this.datasets };
+
+                console.log(this.data);
+
+                this.ctx = this.$.canvas.getContext('2d');
+                this.chart = new Chart(this.ctx).Bar(this.data);
+            },
+            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+            values: [
+                [65, 59, 90, 81, 56, 55, 40],
+                [28, 48, 40, 19, 96, 27, 100]
+            ],
+            colors: [
+                "239,146,131",
+                "252,223,165",
+                "184,226,186",
+                "194,182,160",
+                "254,205,129"
+            ]
+        });
+    </script>
+</polymer-element>
+
+<!-- Radar -->
+
+<polymer-element name="chart-radar" attributes="labels values colors">
+    <template>
+        <canvas id="canvas" width="200" height="200"></canvas>
+    </template>
+    <script>
+        Polymer("chart-radar", {
+            ready: function () {
+                this.datasets = [];
+                this.values.forEach(function (val, i) {
+                    this.datasets.push({
+                        fillColor: "rgba(" + this.colors[i] + ",0.5)",
+                        strokeColor: "rgba(" + this.colors[i] + ",1)",
+                        pointColor: "rgba(" + this.colors[i] + ",1)",
+                        pointStrokeColor: "#fff",
+                        data: this.values[i]
+                    });
+                }, this);
+
+                this.data = { labels: this.labels, datasets: this.datasets };
+
+                console.log(this.data);
+
+                this.ctx = this.$.canvas.getContext('2d');
+                this.chart = new Chart(this.ctx).Radar(this.data);
+            },
+            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+            values: [
+                [65, 59, 90, 81, 56, 55, 40],
+                [28, 48, 40, 19, 96, 27, 100]
+            ],
+            colors: [
+                "239,146,131",
+                "252,223,165",
+                "184,226,186",
+                "194,182,160",
+                "254,205,129"
+            ]
+        });
+    </script>
+</polymer-element>
